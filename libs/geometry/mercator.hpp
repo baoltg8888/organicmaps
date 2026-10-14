@@ -84,6 +84,31 @@ inline m2::RectD WrapRectX(m2::RectD rect)
   return rect;
 }
 
+/// Emits canonical rectangles covering the longitude range, including both
+/// representations of the antimeridian. Ranges of at least 360 cover every X.
+template <typename Fn>
+void ForEachRectXWrapped(m2::RectD rect, Fn && fn)
+{
+  if (rect.SizeX() >= Bounds::kRangeX)
+  {
+    fn(m2::RectD(Bounds::kMinX, rect.minY(), Bounds::kMaxX, rect.maxY()));
+    return;
+  }
+  rect = WrapRectX(rect);
+  if (rect.minX() <= Bounds::kMinX)
+  {
+    fn(m2::RectD(rect.minX() + Bounds::kRangeX, rect.minY(), Bounds::kMaxX, rect.maxY()));
+    fn(m2::RectD(Bounds::kMinX, rect.minY(), rect.maxX(), rect.maxY()));
+  }
+  else if (rect.maxX() >= Bounds::kMaxX)
+  {
+    fn(m2::RectD(rect.minX(), rect.minY(), Bounds::kMaxX, rect.maxY()));
+    fn(m2::RectD(Bounds::kMinX, rect.minY(), rect.maxX() - Bounds::kRangeX, rect.maxY()));
+  }
+  else
+    fn(rect);
+}
+
 void ClampPoint(m2::PointD & pt);
 
 double YToLat(double y);
