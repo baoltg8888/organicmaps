@@ -3,6 +3,7 @@ project(storage_tests)
 set(SRC
   countries_tests.cpp
   country_info_getter_tests.cpp
+  country_info_reader_tests.cpp
   country_name_getter_tests.cpp
   downloader_tests.cpp
   fake_map_files_downloader.cpp
