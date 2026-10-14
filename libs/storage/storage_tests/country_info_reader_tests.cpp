@@ -52,7 +52,7 @@ UNIT_TEST(CountryInfoReader_TriangleCacheEviction)
       for (auto const & point : points)
         expected[id].push_back(PointUToPointD(point, cp.GetCoordBits()));
       serial::TrianglesChainSaver saver(cp);
-      saver(points, {{-1, 0, 0, -1}});
+      saver(points, {{-1, 0, 0, static_cast<char>(-1)}});
       saver.Save(*container.GetWriter("t" + name));
       countries.emplace_back(name, m2::RectD(x, 0, x + 1, 1));
     }
